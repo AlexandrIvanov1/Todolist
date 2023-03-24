@@ -1,16 +1,20 @@
 import React, {ChangeEvent, useState, KeyboardEvent} from 'react';
 import {FilterValueType, TaskType} from './App';
 
+//types
 export type TodolistType = {
     title: string
+    id: string
     tasks: Array<TaskType>
-    deleteTask: (id: string) => void
-    changeFilter: (newFilterValue: FilterValueType) => void
-    addTask: (title: string) => void
-    changeTaskStatus: (id: string, newValue: boolean) => void
+    deleteTask: (todolistId: string, id: string) => void
+    changeFilter: (todolistId: string, newFilterValue: FilterValueType) => void
+    addTask: (todolistId: string, title: string) => void
+    changeTaskStatus: (todolistId: string, id: string, newValue: boolean) => void
     filter: FilterValueType
+    deleteTodolist: (todolistId: string) => void
 }
 
+//component
 export const Todolist: React.FC<TodolistType> = (props) => {
 
     const [title, setTitle] = useState('')
@@ -28,7 +32,7 @@ export const Todolist: React.FC<TodolistType> = (props) => {
         if (title.trim() === '') {
             setError('Title is empty')
         } else {
-            props.addTask(title.trim())
+            props.addTask(props.id, title.trim())
             setTitle('')
         }
     }
@@ -39,13 +43,17 @@ export const Todolist: React.FC<TodolistType> = (props) => {
         }
     }
 
-    const changeFilterAll = () => props.changeFilter('all')
-    const changeFilterActive = () => props.changeFilter('active')
-    const changeFilterCompleted = () => props.changeFilter('completed')
+    const changeFilterAll = () => props.changeFilter(props.id, 'all')
+    const changeFilterActive = () => props.changeFilter(props.id, 'active')
+    const changeFilterCompleted = () => props.changeFilter(props.id, 'completed')
+
+    const deleteTodolist = () => props.deleteTodolist(props.id)
 
     return (
-        <div>
-            <h3>{props.title}</h3>
+        <div className={'todolist'}>
+            <h3>
+                {props.title} <button onClick={deleteTodolist}>x</button>
+            </h3>
             <div>
                 <input
                     type="text"
@@ -60,10 +68,10 @@ export const Todolist: React.FC<TodolistType> = (props) => {
             <ul>
                 {props.tasks.map(t => {
 
-                    const deleteTask = () => props.deleteTask(t.id)
+                    const deleteTask = () => props.deleteTask(props.id, t.id)
 
                     const toggleCheckbox = (e: ChangeEvent<HTMLInputElement>) => {
-                        props.changeTaskStatus(t.id, e.currentTarget.checked)
+                        props.changeTaskStatus(props.id, t.id, e.currentTarget.checked)
                     }
 
                     return (
