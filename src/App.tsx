@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
-import './App.css';
 import {Todolist} from './Todolist';
 import {v1} from 'uuid';
 import {AddItemForm} from './AddItemForm';
+import {AppBarComponent} from './AppBarComponent';
+import {Container, Grid, Paper} from '@mui/material';
 
 //types
 export type TaskType = {
@@ -32,13 +33,13 @@ function App() {
     ])
 
     const [allTasks, setAllTasks] = useState<AllTaskType>({
-        [todolistId1] : [
+        [todolistId1]: [
             {id: v1(), title: 'HTML', isDone: true},
             {id: v1(), title: 'CSS', isDone: true},
             {id: v1(), title: 'JS', isDone: false},
             {id: v1(), title: 'React', isDone: false},
         ],
-        [todolistId2] : [
+        [todolistId2]: [
             {id: v1(), title: 'Book', isDone: true},
             {id: v1(), title: 'Potato', isDone: true},
             {id: v1(), title: 'Pasta', isDone: false},
@@ -96,37 +97,50 @@ function App() {
 
     return (
         <div className="App">
-            <AddItemForm addItem={addTodolist}/>
-            {todolists.map(tl => {
 
-                let filteredTask = allTasks[tl.id]
+            <AppBarComponent/>
 
-                if (tl.filter === 'active') {
-                    filteredTask = allTasks[tl.id].filter(t => !t.isDone)
-                }
-                if (tl.filter === 'completed') {
-                    filteredTask = allTasks[tl.id].filter(t => t.isDone)
-                }
+            <Container fixed>
+                <Grid container style={{padding: '20px'}}>
+                    <AddItemForm addItem={addTodolist}/>
+                </Grid>
+                <Grid container spacing={5}>
+                    {todolists.map(tl => {
 
-                return (
-                    <Todolist
-                        key={tl.id}
-                        id={tl.id}
-                        title={tl.title}
-                        tasks={filteredTask}
-                        deleteTask={deleteTask}
-                        changeFilter={changeFilter}
-                        addTask={addTask}
-                        changeTaskStatus={changeTaskStatus}
-                        filter={tl.filter}
-                        deleteTodolist={deleteTodolist}
-                        changeTodolistTitle={changeTodolistTitle}
-                        changeTaskTitle={changeTaskTitle}
-                    />
-                )
-            })}
+                        let filteredTask = allTasks[tl.id]
+
+                        if (tl.filter === 'active') {
+                            filteredTask = allTasks[tl.id].filter(t => !t.isDone)
+                        }
+                        if (tl.filter === 'completed') {
+                            filteredTask = allTasks[tl.id].filter(t => t.isDone)
+                        }
+
+                        return (
+                            <Grid item>
+                                <Paper style={{padding: '10px'}}>
+                                    <Todolist
+                                        key={tl.id}
+                                        id={tl.id}
+                                        title={tl.title}
+                                        tasks={filteredTask}
+                                        deleteTask={deleteTask}
+                                        changeFilter={changeFilter}
+                                        addTask={addTask}
+                                        changeTaskStatus={changeTaskStatus}
+                                        filter={tl.filter}
+                                        deleteTodolist={deleteTodolist}
+                                        changeTodolistTitle={changeTodolistTitle}
+                                        changeTaskTitle={changeTaskTitle}
+                                    />
+                                </Paper>
+                            </Grid>
+                        )
+                    })}
+                </Grid>
+            </Container>
         </div>
     );
 }
 
-export default App;
+    export default App;

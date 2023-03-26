@@ -1,4 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import {IconButton, TextField} from '@mui/material';
+import { AddBox } from '@mui/icons-material';
 
 //types
 type AddItemFormType = {
@@ -35,15 +37,19 @@ export const AddItemForm: React.FC<AddItemFormType> = ({addItem}) => {
 
     return (
         <div>
-            <input
+            <TextField
                 type="text"
                 value={title}
+                label={error ? 'Error' : 'Enter the title'}
+                helperText={error ? 'Title is empty' : ''}
+                error={!!error}
                 onChange={onChangeTitleHandler}
                 onKeyDown={onKeyPressHandler}
-                className={error ? 'error' : ''}
             />
-            <button onClick={addItemCallback}>+</button>
-            {error && <div className={'error-message'}>{error}</div>}
+            {/*<Button onClick={addItemCallback} variant={'contained'} size={'small'}>+</Button>*/}
+            <IconButton onClick={addItemCallback} color={'primary'}>
+                <AddBox/>
+            </IconButton>
         </div>
     )
 }
