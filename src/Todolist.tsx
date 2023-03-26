@@ -1,12 +1,13 @@
 import React, {ChangeEvent} from 'react';
-import {FilterValueType, TaskType} from './App';
+import {TaskType} from './App';
 import {AddItemForm} from './AddItemForm';
 import {EditableSpan} from './EditableSpan';
 import {Button, Checkbox, IconButton} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import {FilterValueType} from './state/todolist-reducer';
 
 //types
-export type TodolistType = {
+export type TodolistPropsType = {
     title: string
     id: string
     tasks: Array<TaskType>
@@ -21,7 +22,7 @@ export type TodolistType = {
 }
 
 //component
-export const Todolist: React.FC<TodolistType> =
+export const Todolist: React.FC<TodolistPropsType> =
     ({id, title, filter, changeTodolistTitle, deleteTodolist,
          changeTaskTitle, changeTaskStatus, addTask, tasks, deleteTask, changeFilter}) => {
 
@@ -67,9 +68,21 @@ export const Todolist: React.FC<TodolistType> =
                 })}
             </ul>
             <div>
-                <Button onClick={changeFilterAll} color={'inherit'} variant={filter === 'all' ? 'contained' : 'text'}>All</Button>
-                <Button onClick={changeFilterActive} color={'primary'} variant={filter === 'active' ? 'contained' : 'text'}>Active</Button>
-                <Button onClick={changeFilterCompleted} color={'secondary'} variant={filter === 'completed' ? 'contained' : 'text'}>Completed</Button>
+                <Button
+                    onClick={changeFilterAll}
+                    color={'inherit'}
+                    variant={filter === 'all' ? 'contained' : 'text'}
+                >All</Button>
+                <Button
+                    onClick={changeFilterActive}
+                    color={'primary'}
+                    variant={filter === 'active' ? 'contained' : 'text'}
+                >Active</Button>
+                <Button
+                    onClick={changeFilterCompleted}
+                    color={'secondary'}
+                    variant={filter === 'completed' ? 'contained' : 'text'}
+                >Completed</Button>
             </div>
         </div>
     )

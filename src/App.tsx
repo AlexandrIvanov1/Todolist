@@ -4,18 +4,13 @@ import {v1} from 'uuid';
 import {AddItemForm} from './AddItemForm';
 import {AppBarComponent} from './AppBarComponent';
 import {Container, Grid, Paper} from '@mui/material';
+import {FilterValueType, TodolistType} from './state/todolist-reducer';
 
 //types
 export type TaskType = {
     id: string
     title: string
     isDone: boolean
-}
-export type FilterValueType = 'all' | 'active' | 'completed'
-export type TodolistType = {
-    id: string
-    title: string
-    filter: FilterValueType
 }
 export type AllTaskType = {
     [key: string]: Array<TaskType>
@@ -143,4 +138,4 @@ function App() {
     );
 }
 
-    export default App;
+export default App;
