@@ -5,16 +5,8 @@ import {AddItemForm} from './AddItemForm';
 import {AppBarComponent} from './AppBarComponent';
 import {Container, Grid, Paper} from '@mui/material';
 import {FilterValueType, TodolistType} from './state/todolist-reducer';
+import {AllTaskType, TaskType} from './state/task-reducer';
 
-//types
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
-export type AllTaskType = {
-    [key: string]: Array<TaskType>
-}
 
 //component
 function App() {
@@ -135,7 +127,7 @@ function App() {
                 </Grid>
             </Container>
         </div>
-    );
+    )
 }
 
 export default App;

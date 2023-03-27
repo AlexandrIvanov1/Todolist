@@ -40,13 +40,13 @@ export type TodolistType = {
     filter: FilterValueType
 }
 
-type TodolistActionsType =
+export type TodolistActionsType =
     | DeleteTodolistActionType
     | AddTodolistActionType
     | ChangeTodolistTitleActionType
     | ChangeTodolistFilterActionType
 
-type DeleteTodolistActionType = ReturnType<typeof deleteTodolist>
-type AddTodolistActionType = ReturnType<typeof addTodolist>
-type ChangeTodolistTitleActionType = ReturnType<typeof changeTodolistTitle>
-type ChangeTodolistFilterActionType = ReturnType<typeof changeTodolistFilter>
+export type DeleteTodolistActionType = ReturnType<typeof deleteTodolist>
+export type AddTodolistActionType = ReturnType<typeof addTodolist>
+export type ChangeTodolistTitleActionType = ReturnType<typeof changeTodolistTitle>
+export type ChangeTodolistFilterActionType = ReturnType<typeof changeTodolistFilter>

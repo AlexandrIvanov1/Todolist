@@ -1,5 +1,5 @@
 import React, {ChangeEvent} from 'react';
-import {TaskType} from './App';
+import {TaskType} from './state/task-reducer';
 import {AddItemForm} from './AddItemForm';
 import {EditableSpan} from './EditableSpan';
 import {Button, Checkbox, IconButton} from '@mui/material';
