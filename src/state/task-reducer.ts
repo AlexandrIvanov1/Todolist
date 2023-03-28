@@ -32,18 +32,17 @@ export const taskReducer = (state = initialState, action: TaskActionsType): AllT
     }
 }
 
-
 //actions
-export const deleteTask = (todolistId: string, taskId: string) => {
+export const deleteTaskAC = (todolistId: string, taskId: string) => {
     return {type: 'DELETE-TASK', todolistId, taskId} as const
 }
-export const addTask = (todolistId: string, title: string) => {
+export const addTaskAC = (todolistId: string, title: string) => {
     return {type: 'ADD-TASK', todolistId, title} as const
 }
-export const changeTaskTitle = (todolistId: string, taskId: string, title: string) => {
+export const changeTaskTitleAC = (todolistId: string, taskId: string, title: string) => {
     return {type: 'CHANGE-TASK-TITLE', todolistId, taskId, title} as const
 }
-export const changeTaskStatus = (todolistId: string, taskId: string, isDone: boolean) => {
+export const changeTaskStatusAC = (todolistId: string, taskId: string, isDone: boolean) => {
     return {type: 'CHANGE-TASK-STATUS', todolistId, taskId, isDone} as const
 }
 
@@ -65,7 +64,7 @@ export type TaskActionsType =
     | AddTodolistActionType
     | DeleteTodolistActionType
 
-export type DeleteTaskActionType = ReturnType<typeof deleteTask>
-export type AddTaskActionType = ReturnType<typeof addTask>
-export type ChangeTaskTitleActionType = ReturnType<typeof changeTaskTitle>
-export type ChangeTaskStatusActionType = ReturnType<typeof changeTaskStatus>
+export type DeleteTaskActionType = ReturnType<typeof deleteTaskAC>
+export type AddTaskActionType = ReturnType<typeof addTaskAC>
+export type ChangeTaskTitleActionType = ReturnType<typeof changeTaskTitleAC>
+export type ChangeTaskStatusActionType = ReturnType<typeof changeTaskStatusAC>
