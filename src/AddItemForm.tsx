@@ -1,6 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {IconButton, TextField} from '@mui/material';
-import { AddBox } from '@mui/icons-material';
+import {AddBox} from '@mui/icons-material';
 
 //types
 type AddItemFormType = {
@@ -8,7 +8,7 @@ type AddItemFormType = {
 }
 
 //component
-export const AddItemForm: React.FC<AddItemFormType> = ({addItem}) => {
+export const AddItemForm: React.FC<AddItemFormType> = React.memo(({addItem}) => {
 
     const [title, setTitle] = useState('')
     const [error, setError] = useState<string | null>(null)
@@ -46,10 +46,9 @@ export const AddItemForm: React.FC<AddItemFormType> = ({addItem}) => {
                 onChange={onChangeTitleHandler}
                 onKeyDown={onKeyPressHandler}
             />
-            {/*<Button onClick={addItemCallback} variant={'contained'} size={'small'}>+</Button>*/}
             <IconButton onClick={addItemCallback} color={'primary'}>
                 <AddBox/>
             </IconButton>
         </div>
     )
-}
+})

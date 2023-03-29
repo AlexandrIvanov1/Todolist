@@ -8,7 +8,7 @@ type EditableSpanType = {
 }
 
 //component
-export const EditableSpan: React.FC<EditableSpanType> = ({title, callback}) => {
+export const EditableSpan: React.FC<EditableSpanType> = React.memo(({title, callback}) => {
 
     const [localTitle, setLocalTitle] = useState(title)
     const [editMode, setEditMode] = useState(false)
@@ -39,4 +39,4 @@ export const EditableSpan: React.FC<EditableSpanType> = ({title, callback}) => {
             />
             : <span onDoubleClick={activateSettingsMode}>{localTitle}</span>
     )
-}
+})
