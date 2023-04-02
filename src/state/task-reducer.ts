@@ -9,7 +9,7 @@ export const taskReducer = (state = initialState, action: TaskActionsType): AllT
         case 'DELETE-TASK':
             return {...state, [action.todolistId]: state[action.todolistId].filter(t => t.id !== action.taskId)}
         case 'ADD-TASK':
-            const newTask: TaskType = {id: v1(), title: action.title, isDone: false}
+            const newTask: TaskType = {id: v1(), title: action.title, status: TaskStatuses.New, addedDate: '', deadline: '', description: '', order: 0, startDate: '', priority: TaskPriorities.Low, todoListId: action.todolistId}
             return {...state, [action.todolistId]: [newTask, ...state[action.todolistId]]}
         case 'CHANGE-TASK-TITLE':
             return {
@@ -19,7 +19,7 @@ export const taskReducer = (state = initialState, action: TaskActionsType): AllT
         case 'CHANGE-TASK-STATUS':
             return {
                 ...state, [action.todolistId]: state[action.todolistId]
-                    .map(t => t.id === action.taskId ? {...t, isDone: action.isDone} : t)
+                    .map(t => t.id === action.taskId ? {...t, status: action.status} : t)
             }
         case 'ADD-TODOLIST':
             return {...state, [action.id]: []}
@@ -42,20 +42,11 @@ export const addTaskAC = (todolistId: string, title: string) => {
 export const changeTaskTitleAC = (todolistId: string, taskId: string, title: string) => {
     return {type: 'CHANGE-TASK-TITLE', todolistId, taskId, title} as const
 }
-export const changeTaskStatusAC = (todolistId: string, taskId: string, isDone: boolean) => {
-    return {type: 'CHANGE-TASK-STATUS', todolistId, taskId, isDone} as const
+export const changeTaskStatusAC = (todolistId: string, taskId: string, status: TaskStatuses) => {
+    return {type: 'CHANGE-TASK-STATUS', todolistId, taskId, status} as const
 }
 
 //types
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
-export type AllTaskType = {
-    [key: string]: Array<TaskType>
-}
-
 export type TaskActionsType =
     | DeleteTaskActionType
     | AddTaskActionType
@@ -68,3 +59,32 @@ export type DeleteTaskActionType = ReturnType<typeof deleteTaskAC>
 export type AddTaskActionType = ReturnType<typeof addTaskAC>
 export type ChangeTaskTitleActionType = ReturnType<typeof changeTaskTitleAC>
 export type ChangeTaskStatusActionType = ReturnType<typeof changeTaskStatusAC>
+
+export type AllTaskType = {
+    [key: string]: Array<TaskType>
+}
+export type TaskType = {
+    id: string
+    todoListId: string
+    title: string
+    description: string
+    status: TaskStatuses
+    priority: TaskPriorities
+    startDate: string
+    deadline: string
+    order: number
+    addedDate: string
+}
+export enum TaskStatuses {
+    New = 0,
+    InProgress = 1,
+    Completed = 2,
+    Draft = 3
+}
+export enum TaskPriorities {
+    Low = 0,
+    Middle = 1,
+    High = 2,
+    Urgently = 3,
+    Later = 4
+}

@@ -1,6 +1,7 @@
 import {action} from "@storybook/addon-actions";
 import {Task} from "../Task";
 import {ComponentMeta, ComponentStory} from "@storybook/react";
+import {TaskPriorities, TaskStatuses} from "../state/task-reducer";
 
 
 export default {
@@ -23,12 +24,14 @@ const Template: ComponentStory<typeof Task> = (args) => <Task {...args}/>
 export const TaskIsDoneExample = Template.bind({})
 TaskIsDoneExample.args = {
     ...baseArgs,
-    task: {id: '1', title: 'React', isDone: true},
+    task: {id: '1', title: 'React', status: TaskStatuses.Completed, addedDate: '', deadline: '', description: '',
+        order: 0, startDate: '', priority: TaskPriorities.Low, todoListId: 'todolistId1'},
     todolistId: 'todolistId1'
 }
 export const TaskIsNotDoneExample = Template.bind({})
 TaskIsNotDoneExample.args = {
     ...baseArgs,
-    task: {id: '1', title: 'React', isDone: false},
+    task: {id: '1', title: 'React', status: TaskStatuses.New, addedDate: '', deadline: '', description: '',
+        order: 0, startDate: '', priority: TaskPriorities.Low, todoListId: 'todolistId1'},
     todolistId: 'todolistId1'
 }

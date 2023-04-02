@@ -1,14 +1,14 @@
 import {v1} from 'uuid';
 
-const initialState: Array<TodolistType> = []
+const initialState: Array<TodolistDomainType> = []
 
 //reducer
-export const todolistReducer = (state = initialState, action: TodolistActionsType): Array<TodolistType> => {
+export const todolistReducer = (state = initialState, action: TodolistActionsType): Array<TodolistDomainType> => {
     switch (action.type) {
         case 'DELETE-TODOLIST':
             return state.filter(tl => tl.id !== action.todolistId)
         case 'ADD-TODOLIST':
-            return [{id: action.id, title: action.title, filter: 'all'}, ...state]
+            return [{id: action.id, title: action.title, filter: 'all', addedDate: '', order: 1}, ...state]
         case 'CHANGE-TODOLIST-TITLE':
             return state.map(tl => tl.id === action.todolistId ? {...tl, title: action.title} : tl)
         case 'CHANGE-TODOLIST-FILTER':
@@ -37,6 +37,10 @@ export type FilterValueType = 'all' | 'active' | 'completed'
 export type TodolistType = {
     id: string
     title: string
+    addedDate: string
+    order: number
+}
+export type TodolistDomainType = TodolistType & {
     filter: FilterValueType
 }
 

@@ -1,4 +1,6 @@
 import axios from "axios";
+import {TaskType} from "../state/task-reducer";
+import {TodolistType} from "../state/todolist-reducer";
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
@@ -33,30 +35,11 @@ export const todolistAPI = {
 }
 
 //types
-type TodolistType = {
-    id: string
-    title: string
-    addedDate: string
-    order: number
-}
 type TodolistResponseType<T = {}> = {
     data: T,
     resultCode: number
     messages: Array<string>
     fieldsErrors: Array<string>
-}
-
-type TaskType = {
-    id: string
-    todoListId: string
-    title: string
-    description: string
-    status: number
-    priority: number
-    startDate: string
-    deadline: string
-    order: number
-    addedDate: string
 }
 type GetTaskResponseType = {
     items: TaskType
