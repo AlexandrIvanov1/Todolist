@@ -1,7 +1,7 @@
 import {action} from "@storybook/addon-actions";
-import {Task} from "../Task";
+import {Task} from "../features/TodolistsList/Todolist/Task/Task";
 import {ComponentMeta, ComponentStory} from "@storybook/react";
-import {TaskPriorities, TaskStatuses} from "../state/task-reducer";
+import {TaskPriorities, TaskStatuses} from "../features/TodolistsList/task-reducer";
 
 
 export default {

@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {todolistAPI} from "../api/todolistAPI";
+import {TaskPriorities, TaskStatuses} from "../features/TodolistsList/task-reducer";
 
 export default {
     title: 'API'
@@ -203,7 +204,18 @@ export const UpdateTasks = () => {
     const [title, setTitle] = useState('')
 
     const updateTasks = () => {
-        todolistAPI.updateTask(todolistId, taskId, title)
+        todolistAPI.updateTask(todolistId, taskId, {
+            title: title,
+            status: TaskStatuses.New,
+            // addedDate: '',
+            // order: 1,
+            // id: taskId,
+            startDate: '',
+            priority: TaskPriorities.Low,
+            // todoListId: todolistId,
+            description: '',
+            deadline: ''
+        })
             .then(res => setState(res.data))
         setTitle('')
     }

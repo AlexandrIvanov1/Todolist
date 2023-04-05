@@ -1,11 +1,12 @@
-import React, {useCallback} from 'react';
-import {AddItemForm} from './AddItemForm';
-import {EditableSpan} from './EditableSpan';
+import React, {useCallback, useEffect} from 'react';
+import {AddItemForm} from '../../../components/AddItemForm/AddItemForm';
+import {EditableSpan} from '../../../components/EditableSpan/EditableSpan';
 import {Button, IconButton} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {FilterValueType} from './state/todolist-reducer';
-import {Task} from "./Task";
-import {TaskStatuses, TaskType} from "./state/task-reducer";
+import {FilterValueType} from '../todolist-reducer';
+import {Task} from "./Task/Task";
+import {fetchTasks, TaskStatuses, TaskType} from "../task-reducer";
+import {useAppDispatch} from "../../../app/store";
 
 //types
 export type TodolistPropsType = {
@@ -28,6 +29,12 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(
          id, title, filter, changeTodolistTitle, deleteTodolist,
          changeTaskTitle, changeTaskStatus, addTask, tasks, deleteTask, changeFilter
      }) => {
+
+        const dispatch = useAppDispatch()
+
+        useEffect(() => {
+            dispatch(fetchTasks(id))
+        } ,[])
 
         const pureDeleteTodolist = () => deleteTodolist(id)
 
