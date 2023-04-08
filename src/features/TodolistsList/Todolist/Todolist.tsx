@@ -7,17 +7,19 @@ import {FilterValueType} from '../todolist-reducer';
 import {Task} from "./Task/Task";
 import {fetchTasks, TaskStatuses, TaskType} from "../task-reducer";
 import {useAppDispatch} from "../../../app/store";
+import {RequestStatusType} from "../../../app/app-reducer";
 
 //types
 export type TodolistPropsType = {
     title: string
     id: string
+    filter: FilterValueType
+    entityStatus: RequestStatusType
     tasks: Array<TaskType>
     deleteTask: (todolistId: string, id: string) => void
     changeFilter: (todolistId: string, newFilterValue: FilterValueType) => void
     addTask: (todolistId: string, title: string) => void
     changeTaskStatus: (todolistId: string, id: string, newValue: TaskStatuses) => void
-    filter: FilterValueType
     deleteTodolist: (todolistId: string) => void
     changeTodolistTitle: (todolistId: string, title: string) => void
     changeTaskTitle: (todolistId: string, taskId: string, title: string) => void
@@ -26,7 +28,7 @@ export type TodolistPropsType = {
 //component
 export const Todolist: React.FC<TodolistPropsType> = React.memo(
     ({
-         id, title, filter, changeTodolistTitle, deleteTodolist,
+         id, title, filter, entityStatus, changeTodolistTitle, deleteTodolist,
          changeTaskTitle, changeTaskStatus, addTask, tasks, deleteTask, changeFilter
      }) => {
 
@@ -59,11 +61,11 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(
             <div className={'todolist'}>
                 <h3>
                     <EditableSpan title={title} callback={pureChangeTodolistTitle}/>
-                    <IconButton aria-label="delete" onClick={pureDeleteTodolist}>
+                    <IconButton aria-label="delete" onClick={pureDeleteTodolist} disabled={entityStatus === 'loading'}>
                         <DeleteIcon/>
                     </IconButton>
                 </h3>
-                <AddItemForm addItem={addTaskForTodolist}/>
+                <AddItemForm addItem={addTaskForTodolist} disabled={entityStatus === 'loading'}/>
                 <ul>
                     {filteredTask.map(t => {
                         return <Task

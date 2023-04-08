@@ -2,6 +2,8 @@ import {AddTodolistActionType, DeleteTodolistActionType, SetTodolistsActionType}
 import {Dispatch} from "redux";
 import {todolistAPI} from "../../api/todolistAPI";
 import {AppRootStateType} from "../../app/store";
+import {setAppStatus} from "../../app/app-reducer";
+import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 
 const initialState: AllTaskType = {}
 
@@ -23,14 +25,14 @@ export const taskReducer = (state = initialState, action: TaskActionsType): AllT
             const stateCopy = {...state}
             delete stateCopy[action.todolistId]
             return stateCopy
-        case "SET-TODOLISTS": {
+        case 'SET-TODOLISTS': {
             const stateCopy = {...state}
             action.todolists.forEach(tl => {
                 stateCopy[tl.id] = []
             })
             return stateCopy
         }
-        case "SET-TASKS":
+        case 'SET-TASKS':
             return {...state, [action.todolistId]: action.tasks}
         default:
             return state
@@ -52,24 +54,45 @@ export const setTasksAC = (todolistId: string, tasks: Array<TaskType>) => {
 }
 
 //thunks
-export const fetchTasks = (todolistId: string) => (dispatch: Dispatch<TaskActionsType>) => {
+export const fetchTasks = (todolistId: string) => (dispatch: Dispatch) => {
+    dispatch(setAppStatus('loading'))
     todolistAPI.getTasks(todolistId)
-        .then(res => dispatch(setTasksAC(todolistId, res.data.items)))
+        .then(res => {
+            dispatch(setTasksAC(todolistId, res.data.items))
+            dispatch(setAppStatus('success'))
+        })
+        .catch(error => {
+            handleServerNetworkError(error, dispatch)
+        })
 }
-export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch<TaskActionsType>) => {
+export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch) => {
+    dispatch(setAppStatus('loading'))
     todolistAPI.deleteTask(todolistId, taskId)
         .then(() => {
             dispatch(deleteTaskAC(todolistId, taskId))
+            dispatch(setAppStatus('success'))
+        })
+        .catch(error => {
+            handleServerNetworkError(error, dispatch)
         })
 }
-export const addTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch<TaskActionsType>) => {
+export const addTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch) => {
+    dispatch(setAppStatus('loading'))
     todolistAPI.createTask(todolistId, title)
         .then(res => {
-            dispatch(addTaskAC(res.data.data.item))
+            if (res.data.resultCode === 0) {
+                dispatch(addTaskAC(res.data.data.item))
+                dispatch(setAppStatus('success'))
+            } else {
+                handleServerAppError(res.data, dispatch)
+            }
+        })
+        .catch(error => {
+            handleServerNetworkError(error, dispatch)
         })
 }
 export const updateTaskTC = (todolistId: string, taskId: string, domainModel: UpdateTaskModelType) =>
-    (dispatch: Dispatch<TaskActionsType>, getState: () => AppRootStateType) => {
+    (dispatch: Dispatch, getState: () => AppRootStateType) => {
 
         const task = getState().tasks[todolistId].find(t => t.id === taskId)
         if (!task) return
@@ -84,8 +107,19 @@ export const updateTaskTC = (todolistId: string, taskId: string, domainModel: Up
             ...domainModel
         }
 
+        dispatch(setAppStatus('loading'))
         todolistAPI.updateTask(todolistId, taskId, apiModel)
-            .then(() => dispatch(updateTaskAC(todolistId, taskId, apiModel)))
+            .then(res => {
+                if (res.data.resultCode === 0) {
+                    dispatch(updateTaskAC(todolistId, taskId, apiModel))
+                    dispatch(setAppStatus('success'))
+                } else {
+                    handleServerAppError(res.data, dispatch)
+                }
+            })
+            .catch(error => {
+                handleServerNetworkError(error, dispatch)
+            })
     }
 
 //types

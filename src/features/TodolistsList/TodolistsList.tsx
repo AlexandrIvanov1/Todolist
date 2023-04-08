@@ -14,11 +14,13 @@ import React, {useCallback, useEffect} from "react";
 import {Grid, Paper} from "@mui/material";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {Todolist} from "./Todolist/Todolist";
+import {RequestStatusType} from "../../app/app-reducer";
 
 export const TodolistsList = () => {
 
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, AllTaskType>(state => state.tasks)
+    const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
 
     const dispatch = useAppDispatch()
 
@@ -61,7 +63,7 @@ export const TodolistsList = () => {
     return (
         <>
             <Grid container style={{padding: '20px'}}>
-                <AddItemForm addItem={addTodolist}/>
+                <AddItemForm addItem={addTodolist} disabled={status === 'loading'}/>
             </Grid>
             <Grid container spacing={5}>
                 {todolists.map(tl => {
@@ -72,12 +74,13 @@ export const TodolistsList = () => {
                                     key={tl.id}
                                     id={tl.id}
                                     title={tl.title}
+                                    filter={tl.filter}
+                                    entityStatus={tl.entityStatus}
                                     tasks={tasks[tl.id]}
                                     deleteTask={deleteTask}
                                     changeFilter={changeFilter}
                                     addTask={addTask}
                                     changeTaskStatus={changeTaskStatus}
-                                    filter={tl.filter}
                                     deleteTodolist={deleteTodolist}
                                     changeTodolistTitle={changeTodolistTitle}
                                     changeTaskTitle={changeTaskTitle}

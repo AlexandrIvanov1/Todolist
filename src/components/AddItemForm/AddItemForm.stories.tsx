@@ -9,4 +9,6 @@ export default {
 
 const addItemCallback = action('Item added')
 
-export const AddItemFormBaseExample = () => <AddItemForm addItem={addItemCallback}/>
+export const AddItemFormBaseExample = () => <AddItemForm addItem={addItemCallback} disabled={false}/>
+
+export const AddItemFormDisabled = () => <AddItemForm addItem={addItemCallback} disabled={true}/>
