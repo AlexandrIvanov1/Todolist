@@ -5,7 +5,7 @@ import {AddBox} from '@mui/icons-material';
 //types
 type AddItemFormType = {
     addItem: (title: string) => void
-    disabled: boolean
+    disabled?: boolean
 }
 
 //component

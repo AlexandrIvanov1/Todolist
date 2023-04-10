@@ -1,8 +1,8 @@
 import {
-    addTodolistAC,
+    addTodolistAC, changeTodolistEntityStatus,
     changeTodolistFilterAC,
     changeTodolistTitleAC,
-    deleteTodolistAC, TodolistDomainType,
+    deleteTodolistAC, setTodolistsAC, TodolistDomainType,
     todolistReducer,
 } from './todolist-reducer';
 
@@ -47,4 +47,26 @@ test('correct filter of todolist should be changed', () => {
     expect(startState[0].filter).toBe('all')
     expect(endState[1].filter).toBe('all')
     expect(startState[1].filter).toBe('all')
+})
+
+test('correct status of todolist should be changed', () => {
+    const endState = todolistReducer(startState, changeTodolistEntityStatus('1', 'loading'))
+
+    expect(endState[0].entityStatus).toBe('loading')
+    expect(startState[0].entityStatus).toBe('idle')
+    expect(endState[1].entityStatus).toBe('idle')
+    expect(startState[1].entityStatus).toBe('idle')
+})
+
+test('correct todolists should be added', () => {
+    const todolistsArray = [
+        {id: '3', title: 'What to fix', filter: 'all', order: 0, addedDate: '', entityStatus: 'idle'},
+        {id: '4', title: 'What to repeat', filter: 'all', order: 0, addedDate: '', entityStatus: 'idle'}
+    ]
+    const endState = todolistReducer(startState, setTodolistsAC(todolistsArray))
+
+    expect(endState[0].title).toBe('What to fix')
+    expect(startState[0].title).toBe('What to learn')
+    expect(endState[1].title).toBe('What to repeat')
+    expect(startState[1].title).toBe('What to buy')
 })

@@ -1,7 +1,7 @@
 import {Dispatch} from "redux";
 import {todolistAPI} from "../../api/todolistAPI";
-import {RequestStatusType, setAppStatus, setAppError} from "../../app/app-reducer";
-import {handleServerNetworkError} from "../../utils/error-utils";
+import {RequestStatusType, setAppStatus} from "../../app/app-reducer";
+import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 
 const initialState: Array<TodolistDomainType> = []
 
@@ -61,8 +61,7 @@ export const addTodolistTC = (title: string) => (dispatch: Dispatch) => {
                 dispatch(addTodolistAC(res.data.data.item))
                 dispatch(setAppStatus('success'))
             } else {
-                dispatch(setAppError('The todolist name is too long'))
-                dispatch(setAppStatus('failed'))
+                handleServerAppError(res.data, dispatch)
             }
         })
         .catch(error => {
@@ -85,9 +84,13 @@ export const deleteTodolistTC = (todolistId: string) => (dispatch: Dispatch) => 
 export const changeTodolistTitleTC = (todolistId: string, newTitle: string) => (dispatch: Dispatch) => {
     dispatch(setAppStatus('loading'))
     todolistAPI.updateTodolist(todolistId, newTitle)
-        .then(() => {
-            dispatch(changeTodolistTitleAC(todolistId, newTitle))
-            dispatch(setAppStatus('success'))
+        .then((res) => {
+            if (res.data.resultCode === 0) {
+                dispatch(changeTodolistTitleAC(todolistId, newTitle))
+                dispatch(setAppStatus('success'))
+            } else {
+                handleServerAppError(res.data, dispatch)
+            }
         })
         .catch(error => {
             handleServerNetworkError(error, dispatch)
