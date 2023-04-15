@@ -9,11 +9,12 @@ import {
     FilterValueType,
     TodolistDomainType
 } from "./todolist-reducer";
-import {addTaskTC, AllTaskType, deleteTaskTC, TaskStatuses, updateTaskTC} from "./task-reducer";
+import {addTaskTC, AllTaskType, deleteTaskTC, TaskStatuses, updateTaskTC} from "./Todolist/Task/task-reducer";
 import React, {useCallback, useEffect} from "react";
 import {Grid, Paper} from "@mui/material";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {Todolist} from "./Todolist/Todolist";
+import {Navigate} from "react-router-dom";
 
 type TodolistsListPropsType = {
     demo?: boolean
@@ -23,11 +24,12 @@ export const TodolistsList: React.FC<TodolistsListPropsType> = ({demo = false}) 
 
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, AllTaskType>(state => state.tasks)
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLogged)
 
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        if (demo) {
+        if (demo || !isLoggedIn) {
             return
         }
         dispatch(fetchTodolists())
@@ -64,6 +66,10 @@ export const TodolistsList: React.FC<TodolistsListPropsType> = ({demo = false}) 
     const changeTaskTitle = useCallback((todolistId: string, taskId: string, title: string) => {
         dispatch(updateTaskTC(todolistId, taskId, {title}))
     }, [dispatch])
+
+    if (!isLoggedIn) {
+        return <Navigate to={'/login'}/>
+    }
 
     return (
         <>

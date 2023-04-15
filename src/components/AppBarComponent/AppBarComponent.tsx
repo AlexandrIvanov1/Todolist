@@ -2,12 +2,17 @@ import React from 'react';
 import {AppBar, Box, Button, IconButton, LinearProgress, Toolbar, Typography} from '@mui/material';
 import {MenuBook} from '@mui/icons-material';
 import {useSelector} from "react-redux";
-import {AppRootStateType} from "../../app/store";
+import {AppRootStateType, useAppDispatch} from "../../app/store";
 import {RequestStatusType} from "../../app/app-reducer";
+import {logoutTC} from "../../features/login/auth-reducer";
 
 export function AppBarComponent() {
 
     const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLogged)
+    const dispatch = useAppDispatch()
+
+    const logout = () => dispatch(logoutTC())
 
     return (
         <Box sx={{flexGrow: 1}}>
@@ -19,7 +24,7 @@ export function AppBarComponent() {
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
                         <Button color="inherit">Todolist</Button>
                     </Typography>
-                    <Button color="inherit">Login</Button>
+                    {isLoggedIn && <Button color="inherit" onClick={logout}>Logout</Button>}
                 </Toolbar>
             </AppBar>
             <div style={{position: 'absolute', top: '64px', right: '0px', left: '0px'}}>

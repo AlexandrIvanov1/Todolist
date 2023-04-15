@@ -5,8 +5,7 @@ import {Button, IconButton} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {FilterValueType, TodolistDomainType} from '../todolist-reducer';
 import {Task} from "./Task/Task";
-import {fetchTasks, TaskStatuses, TaskType} from "../task-reducer";
-import {useAppDispatch} from "../../../app/store";
+import {TaskStatuses, TaskType} from "./Task/task-reducer";
 
 //types
 export type TodolistPropsType = {
@@ -29,13 +28,13 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(
          changeTaskTitle, changeTaskStatus, addTask, tasks, deleteTask, changeFilter, demo = false
      }) => {
 
-        const dispatch = useAppDispatch()
+        // const dispatch = useAppDispatch()
 
         useEffect(() => {
             if (demo) {
                 return
             }
-            dispatch(fetchTasks(todolist.id))
+            // dispatch(fetchTasks(todolist.id))
         } ,[])
 
         const pureDeleteTodolist = () => deleteTodolist(todolist.id)

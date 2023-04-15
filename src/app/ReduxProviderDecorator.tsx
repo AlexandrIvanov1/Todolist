@@ -1,10 +1,10 @@
 import React from 'react'
 import {Provider} from 'react-redux'
 import {applyMiddleware, combineReducers, legacy_createStore as createStore} from 'redux'
-import {TaskPriorities, taskReducer, TaskStatuses} from '../features/TodolistsList/task-reducer'
+import {TaskPriorities, taskReducer, TaskStatuses} from '../features/TodolistsList/Todolist/Task/task-reducer'
 import {todolistReducer} from '../features/TodolistsList/todolist-reducer'
-import {appReducer} from "../app/app-reducer";
-import {AppRootStateType} from "../app/store";
+import {appReducer} from "./app-reducer";
+import {AppRootStateType} from "./store";
 import {v1} from "uuid";
 import thunk from "redux-thunk";
 
@@ -35,7 +35,11 @@ const initialGlobalState: AppRootStateType = {
     },
     app: {
         status: 'idle',
-        error: null
+        error: null,
+        isInitialized: true
+    },
+    auth: {
+        isLogged: true
     }
 }
 
