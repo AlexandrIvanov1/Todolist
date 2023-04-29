@@ -27,8 +27,10 @@ export function AppBarComponent() {
                     {isLoggedIn && <Button color="inherit" onClick={logout}>Logout</Button>}
                 </Toolbar>
             </AppBar>
-            <div style={{position: 'absolute', top: '64px', right: '0px', left: '0px'}}>
-                {status === 'loading' && <LinearProgress/>}
+            <div style={{position: 'relative'}}>
+                <div style={{position: 'absolute', right: '0px', left: '0px'}}>
+                    {status === 'loading' && <LinearProgress/>}
+                </div>
             </div>
         </Box>
     )
