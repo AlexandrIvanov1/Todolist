@@ -1,5 +1,5 @@
-import {useSelector} from "react-redux";
-import {AppRootStateType, useAppDispatch} from "../../app/store";
+import {useSelector} from 'react-redux';
+import {AppRootStateType, useAppDispatch} from '../../app/store';
 import {
     addTodolistTC,
     changeTodolistFilterAC,
@@ -8,13 +8,13 @@ import {
     fetchTodolists,
     FilterValueType,
     TodolistDomainType
-} from "./todolist-reducer";
-import {addTaskTC, AllTaskType, deleteTaskTC, TaskStatuses, updateTaskTC} from "./Todolist/Task/task-reducer";
-import React, {useCallback, useEffect} from "react";
-import {Grid, Paper} from "@mui/material";
-import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
-import {Todolist} from "./Todolist/Todolist";
-import {Navigate} from "react-router-dom";
+} from './todolist-reducer';
+import {addTaskTC, AllTaskType, deleteTaskTC, TaskStatuses, updateTaskTC} from './Todolist/Task/task-reducer';
+import React, {useCallback, useEffect} from 'react';
+import {Grid, Paper} from '@mui/material';
+import {AddItemForm} from '../../components/AddItemForm/AddItemForm';
+import {Todolist} from './Todolist/Todolist';
+import {Navigate} from 'react-router-dom';
 
 type TodolistsListPropsType = {
     demo?: boolean
@@ -48,7 +48,7 @@ export const TodolistsList: React.FC<TodolistsListPropsType> = ({demo = false}) 
     }, [dispatch])
 
     const changeFilter = useCallback((todolistId: string, newFilterValue: FilterValueType) => {
-        dispatch(changeTodolistFilterAC(todolistId, newFilterValue))
+        dispatch(changeTodolistFilterAC({todolistId: todolistId, filter: newFilterValue}))
     }, [dispatch])
 
     const deleteTask = useCallback((todolistId: string, id: string) => {

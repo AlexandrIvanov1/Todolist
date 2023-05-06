@@ -1,3 +1,5 @@
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+
 const initialState: AppInitialStateType = {
     status: 'idle',
     error: null,
@@ -5,23 +7,25 @@ const initialState: AppInitialStateType = {
 }
 
 //reducer
-export const appReducer = (state = initialState, action: AppReducerActionTypes): AppInitialStateType => {
-    switch (action.type) {
-        case "APP/SET-STATUS":
-            return {...state, status: action.status}
-        case "APP/SET-ERROR":
-            return {...state, error: action.error}
-        case "APP/SET-INITIALIZED":
-            return {...state, isInitialized: action.initialized}
-        default:
-            return state
+const slice = createSlice({
+    name: 'app',
+    initialState: initialState,
+    reducers: {
+        setAppStatus(state, action: PayloadAction<{status: RequestStatusType}>) {
+            state.status = action.payload.status
+        },
+        setAppError(state, action: PayloadAction<{error: string | null}>) {
+            state.error = action.payload.error
+        },
+        setAppInitialized(state, action: PayloadAction<{initialized: boolean}>) {
+            state.isInitialized = action.payload.initialized
+        }
     }
-}
+})
 
-//actions
-export const setAppStatus = (status: RequestStatusType) => ({type: 'APP/SET-STATUS', status} as const)
-export const setAppError = (error: string | null) => ({type: 'APP/SET-ERROR', error} as const)
-export const setAppInitialized = (initialized: boolean) => ({type: 'APP/SET-INITIALIZED', initialized} as const)
+export const appReducer = slice.reducer
+
+export const {setAppStatus, setAppError, setAppInitialized} = slice.actions
 
 //types
 export type AppInitialStateType = {
@@ -30,7 +34,3 @@ export type AppInitialStateType = {
     isInitialized: boolean
 }
 export type RequestStatusType = 'idle' | 'loading' | 'success' | 'failed'
-export type AppReducerActionTypes = SetStatusActionType | SetErrorActionType | SetInitializedActionType
-type SetStatusActionType = ReturnType<typeof setAppStatus>
-type SetErrorActionType = ReturnType<typeof setAppError>
-type SetInitializedActionType = ReturnType<typeof setAppInitialized>
