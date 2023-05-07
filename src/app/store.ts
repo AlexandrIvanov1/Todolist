@@ -15,6 +15,8 @@ const rootReducer = combineReducers({
     auth: authReducer
 })
 
+export type RootReducerType = typeof rootReducer
+
 export const store = configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(thunk)

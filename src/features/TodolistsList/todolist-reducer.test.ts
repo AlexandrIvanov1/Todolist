@@ -1,8 +1,11 @@
 import {
-    addTodolistAC, changeTodolistEntityStatus,
+    addTodolistAC,
+    changeTodolistEntityStatus,
     changeTodolistFilterAC,
     changeTodolistTitleAC,
-    deleteTodolistAC, setTodolistsAC, TodolistDomainType,
+    deleteTodolistAC,
+    setTodolistsAC,
+    TodolistDomainType,
     todolistReducer,
 } from './todolist-reducer';
 
@@ -76,4 +79,13 @@ test('correct todolists should be added', () => {
     expect(startState[0].title).toBe('What to learn')
     expect(endState[1].title).toBe('What to repeat')
     expect(startState[1].title).toBe('What to buy')
+})
+
+test('entity status of todolist should be changed', () => {
+    const endState = todolistReducer(startState, changeTodolistEntityStatus({todolistId: '1', status: 'loading'}))
+
+    expect(startState[0].entityStatus).toBe('idle')
+    expect(endState[0].entityStatus).toBe('loading')
+    expect(startState[1].entityStatus).toBe('idle')
+    expect(endState[1].entityStatus).toBe('idle')
 })

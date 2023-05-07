@@ -2,9 +2,11 @@ import {
     addTaskAC,
     AllTaskType,
     deleteTaskAC,
+    setTasksAC,
     TaskPriorities,
     taskReducer,
-    TaskStatuses, updateTaskAC
+    TaskStatuses,
+    updateTaskAC
 } from './task-reducer';
 import {addTodolistAC, deleteTodolistAC} from '../../todolist-reducer';
 import {v1} from 'uuid';
@@ -106,18 +108,16 @@ test('correct task should be removed', () => {
 
 test('correct task should be added', () => {
     const endState = taskReducer(startState, addTaskAC({
-        task: {
-            todoListId: todolistId1,
-            title: 'Redux',
-            id: '1',
-            addedDate: '',
-            deadline: '',
-            order: 1,
-            startDate: '',
-            description: '',
-            priority: TaskPriorities.Low,
-            status: TaskStatuses.New
-        }
+        todoListId: todolistId1,
+        title: 'Redux',
+        id: '1',
+        addedDate: '',
+        deadline: '',
+        order: 1,
+        startDate: '',
+        description: '',
+        priority: TaskPriorities.Low,
+        status: TaskStatuses.New
     }))
 
     expect(endState[todolistId1].length).toBe(4)
@@ -178,4 +178,19 @@ test('property with todolistId should be deleted', () => {
 
     expect(keys.length).toBe(1)
     expect(endState[todolistId2]).not.toBeDefined()
+})
+
+test('tasks should be added for todolist', () => {
+
+    const state = {
+        [todolistId1]: [],
+        [todolistId2]: []
+    }
+
+    const action = setTasksAC({todolistId: todolistId1, tasks: startState[todolistId1]})
+
+    const endState = taskReducer(state, action)
+
+    expect(endState[todolistId1].length).toBe(3)
+    expect(endState[todolistId2].length).toBe(0)
 })
