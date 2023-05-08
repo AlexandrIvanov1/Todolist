@@ -9,12 +9,13 @@ import {
     FilterValueType,
     TodolistDomainType
 } from './todolist-reducer';
-import {addTaskTC, AllTaskType, deleteTaskTC, TaskStatuses, updateTaskTC} from './Todolist/Task/task-reducer';
+import {addTaskTC, AllTaskType, deleteTaskTC, updateTaskTC} from './Todolist/Task/task-reducer';
 import React, {useCallback, useEffect} from 'react';
 import {Grid, Paper} from '@mui/material';
 import {AddItemForm} from '../../components/AddItemForm/AddItemForm';
 import {Todolist} from './Todolist/Todolist';
 import {Navigate} from 'react-router-dom';
+import {TaskStatuses} from '../../api/todolistAPI';
 
 type TodolistsListPropsType = {
     demo?: boolean
@@ -51,8 +52,8 @@ export const TodolistsList: React.FC<TodolistsListPropsType> = ({demo = false}) 
         dispatch(changeTodolistFilterAC({todolistId: todolistId, filter: newFilterValue}))
     }, [dispatch])
 
-    const deleteTask = useCallback((todolistId: string, id: string) => {
-        dispatch(deleteTaskTC(todolistId, id))
+    const deleteTask = useCallback((todolistId: string, taskId: string) => {
+        dispatch(deleteTaskTC({todolistId, taskId}))
     }, [dispatch])
 
     const addTask = useCallback((todolistId: string, title: string) => {

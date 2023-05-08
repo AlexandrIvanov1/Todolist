@@ -1,15 +1,13 @@
 import {
     addTaskAC,
-    AllTaskType,
-    deleteTaskAC,
-    setTasksAC,
-    TaskPriorities,
+    AllTaskType, deleteTaskTC,
+    fetchTasks,
     taskReducer,
-    TaskStatuses,
     updateTaskAC
 } from './task-reducer';
 import {addTodolistAC, deleteTodolistAC} from '../../todolist-reducer';
 import {v1} from 'uuid';
+import {TaskPriorities, TaskStatuses} from '../../../../api/todolistAPI';
 
 let startState: AllTaskType
 let todolistId1: string = v1()
@@ -97,7 +95,8 @@ beforeEach(() => {
 })
 
 test('correct task should be removed', () => {
-    const endState = taskReducer(startState, deleteTaskAC({todolistId: todolistId2, taskId: '1'}))
+    const param = {todolistId: todolistId2, taskId: '1'}
+    const endState = taskReducer(startState, deleteTaskTC.fulfilled(param, 'requestId', param))
 
     expect(endState[todolistId2].length).toBe(2)
     expect(endState[todolistId1].length).toBe(3)
@@ -187,7 +186,7 @@ test('tasks should be added for todolist', () => {
         [todolistId2]: []
     }
 
-    const action = setTasksAC({todolistId: todolistId1, tasks: startState[todolistId1]})
+    const action = fetchTasks.fulfilled({todolistId: todolistId1, tasks: startState[todolistId1]}, '', todolistId1)
 
     const endState = taskReducer(state, action)
 

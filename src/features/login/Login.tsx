@@ -7,11 +7,12 @@ import FormGroup from '@mui/material/FormGroup';
 import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import {useFormik} from "formik";
-import {loginTC} from "./auth-reducer";
-import {AppRootStateType, useAppDispatch} from "../../app/store";
-import {useSelector} from "react-redux";
-import {Navigate} from "react-router-dom";
+import {FormikHelpers, useFormik} from 'formik';
+import {loginTC} from './auth-reducer';
+import {AppRootStateType, useAppDispatch} from '../../app/store';
+import {useSelector} from 'react-redux';
+import {Navigate} from 'react-router-dom';
+import {LoginParamsType} from '../../api/todolistAPI';
 
 export const Login = () => {
 
@@ -32,19 +33,27 @@ export const Login = () => {
         },
         validate: (values) => {
             const errors: FormikErrorType = {}
-            if (!values.email) {
-                errors.email = 'Required'
-            } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-                errors.email = 'Invalid email address'
-            }
+            // if (!values.email) {
+            //     errors.email = 'Required'
+            // } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+            //     errors.email = 'Invalid email address'
+            // }
             if (values.password.length < 4) {
                 errors.password = 'The password is too short'
             }
             return errors
         },
-        onSubmit: values => {
-            formik.resetForm()
-            dispatch(loginTC(values))
+        onSubmit: async (values, formikHelpers: FormikHelpers<LoginParamsType>) => {
+            // formik.resetForm()
+            const res = await dispatch(loginTC(values))
+            debugger
+            if (loginTC.rejected.match(res)) {
+                if (res.payload?.fieldsErrors?.length) {
+                    const error = res.payload?.fieldsErrors[0]
+                    debugger
+                    formikHelpers.setFieldError(error.field, error.error)
+                }
+            }
         },
     })
 
@@ -69,17 +78,17 @@ export const Login = () => {
                         </FormLabel>
                         <FormGroup>
                             <TextField
-                                label='Email'
-                                margin='normal'
+                                label="Email"
+                                margin="normal"
                                 {...formik.getFieldProps('email')}
                                 onBlur={formik.handleBlur}
                             />
                             {formik.touched.email && formik.errors.email ?
                                 <div style={{color: 'red'}}>{formik.errors.email}</div> : null}
                             <TextField
-                                type='password'
-                                label='Password'
-                                margin='normal'
+                                type="password"
+                                label="Password"
+                                margin="normal"
                                 {...formik.getFieldProps('password')}
                                 onBlur={formik.handleBlur}
                             />

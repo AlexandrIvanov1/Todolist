@@ -1,5 +1,5 @@
 import {Dispatch} from "redux";
-import {todolistAPI} from "../../api/todolistAPI";
+import {todolistAPI, TodolistType} from '../../api/todolistAPI';
 import {RequestStatusType, setAppStatus} from "../../app/app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {fetchTasks} from "./Todolist/Task/task-reducer";
@@ -40,7 +40,6 @@ const slice = createSlice({
     },
     extraReducers: builder => {
         builder.addCase(clearTodolistsAndTasks, () => {
-            debugger
             return []
         })
     }
@@ -115,12 +114,6 @@ export const changeTodolistTitleTC = (todolistId: string, newTitle: string) => (
 
 //types
 export type FilterValueType = 'all' | 'active' | 'completed'
-export type TodolistType = {
-    id: string
-    title: string
-    addedDate: string
-    order: number
-}
 export type TodolistDomainType = TodolistType & {
     filter: FilterValueType
     entityStatus: RequestStatusType
