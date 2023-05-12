@@ -1,19 +1,20 @@
-import {Dispatch} from 'redux';
-import {setAppInitialized, setAppStatus} from '../../app/app-reducer';
+import {initializeAppTC, setAppStatus} from '../../app/app-reducer';
 import {authAPI, FieldsErrorsType, LoginParamsType} from '../../api/todolistAPI';
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {clearTodolistsAndTasks} from '../../common/common.actions';
 import {AxiosError} from 'axios';
 
-export const loginTC = createAsyncThunk<{isLogged: boolean}, LoginParamsType, {rejectValue: {errors: Array<string>, fieldsErrors?: Array<FieldsErrorsType>}}>('auth/login', async (data, thunkAPI) => {
+export const loginTC = createAsyncThunk<undefined, LoginParamsType, {
+    rejectValue: { errors: Array<string>, fieldsErrors?: Array<FieldsErrorsType> }
+}>('auth/login', async (data, thunkAPI) => {
     thunkAPI.dispatch(setAppStatus({status: 'loading'}))
     try {
         const res = await authAPI.login(data)
         if (res.resultCode === 0) {
-            thunkAPI.dispatch(setIsLoggedIn({value: true}))
+            // thunkAPI.dispatch(setIsLoggedIn({value: true}))
             thunkAPI.dispatch(setAppStatus({status: 'success'}))
-            return {isLogged: true}
+            return
         } else {
             handleServerAppError(res, thunkAPI.dispatch)
             debugger
@@ -23,6 +24,25 @@ export const loginTC = createAsyncThunk<{isLogged: boolean}, LoginParamsType, {r
         const error: AxiosError = e
         handleServerNetworkError(error, thunkAPI.dispatch)
         return thunkAPI.rejectWithValue({errors: [error.message]})
+    }
+})
+
+export const logoutTC = createAsyncThunk('auth/logout', async (param, thunkAPI) => {
+    thunkAPI.dispatch(setAppStatus({status: 'loading'}))
+    try {
+        const data = await authAPI.logout()
+        if (data.resultCode === 0) {
+            // thunkAPI.dispatch(setIsLoggedIn({value: false}))
+            thunkAPI.dispatch(setAppStatus({status: 'success'}))
+            thunkAPI.dispatch(clearTodolistsAndTasks())
+            return
+        } else {
+            handleServerAppError(data, thunkAPI.dispatch)
+            return thunkAPI.rejectWithValue({})
+        }
+    } catch (e) {
+        handleServerNetworkError(e, thunkAPI.dispatch)
+        return thunkAPI.rejectWithValue({})
     }
 })
 
@@ -37,8 +57,14 @@ const slice = createSlice({
         }
     },
     extraReducers: builder => {
-        builder.addCase(loginTC.fulfilled, (state, action) => {
-            state.isLogged = action.payload.isLogged
+        builder.addCase(loginTC.fulfilled, (state) => {
+            state.isLogged = true
+        })
+        builder.addCase(logoutTC.fulfilled, (state) => {
+            state.isLogged = false
+        })
+        builder.addCase(initializeAppTC.fulfilled, (state) => {
+            state.isLogged = true
         })
     }
 })
@@ -47,35 +73,3 @@ const slice = createSlice({
 export const authReducer = slice.reducer
 
 export const {setIsLoggedIn} = slice.actions
-
-//thunks
-export const logoutTC = () => (dispatch: Dispatch) => {
-    dispatch(setAppStatus({status: 'loading'}))
-    authAPI.logout()
-        .then(data => {
-            if (data.resultCode === 0) {
-                dispatch(setIsLoggedIn({value: false}))
-                dispatch(setAppStatus({status: 'success'}))
-                dispatch(clearTodolistsAndTasks())
-            } else {
-                handleServerAppError(data, dispatch)
-            }
-        })
-        .catch(e => {
-            handleServerNetworkError(e, dispatch)
-        })
-}
-export const initializeAppTC = () => (dispatch: Dispatch) => {
-    dispatch(setAppStatus({status: 'loading'}))
-    authAPI.me().then(data => {
-        if (data.resultCode === 0) {
-            dispatch(setIsLoggedIn({value: true}))
-            dispatch(setAppStatus({status: 'success'}))
-        }
-        dispatch(setAppStatus({status: 'success'}))
-        dispatch(setAppInitialized({initialized: true}))
-    })
-        .catch(e => {
-            handleServerNetworkError(e, dispatch)
-        })
-}

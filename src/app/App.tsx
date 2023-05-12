@@ -5,9 +5,9 @@ import {TodolistsList} from '../features/TodolistsList/TodolistsList';
 import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar';
 import {Navigate, Route, Routes} from 'react-router-dom';
 import {Login} from '../features/login/Login';
-import {initializeAppTC} from '../features/login/auth-reducer';
 import {AppRootStateType, useAppDispatch} from './store';
 import {useSelector} from 'react-redux';
+import {initializeAppTC} from './app-reducer';
 
 type AppPropsType = { demo?: boolean }
 
