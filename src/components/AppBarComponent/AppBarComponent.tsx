@@ -1,15 +1,17 @@
 import React from 'react';
 import {AppBar, Box, Button, IconButton, LinearProgress, Toolbar, Typography} from '@mui/material';
 import {MenuBook} from '@mui/icons-material';
-import {useSelector} from "react-redux";
-import {AppRootStateType, useAppDispatch} from "../../app/store";
-import {RequestStatusType} from "../../app/app-reducer";
-import {logoutTC} from "../../features/login/auth-reducer";
+import {useSelector} from 'react-redux';
+import {useAppDispatch} from '../../app/store';
+import {logoutTC} from '../../features/Auth/auth-reducer';
+import {appSelectors} from '../../app';
+import {authSelectors} from '../../features/Auth';
 
 export function AppBarComponent() {
 
-    const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
-    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLogged)
+    const status = useSelector(appSelectors.selectStatus)
+    const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn)
+
     const dispatch = useAppDispatch()
 
     const logout = () => dispatch(logoutTC())

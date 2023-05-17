@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {authAPI} from '../api/todolistAPI';
 import {handleServerNetworkError} from '../utils/error-utils';
-import {setIsLoggedIn} from '../features/login/auth-reducer';
+import {setIsLoggedIn} from '../features/Auth/auth-reducer';
 
 
 export const initializeAppTC = createAsyncThunk('app/initializeApp', async (arg, thunkAPI) => {
@@ -12,8 +12,8 @@ export const initializeAppTC = createAsyncThunk('app/initializeApp', async (arg,
             thunkAPI.dispatch(setIsLoggedIn({value: true}))
             thunkAPI.dispatch(setAppStatus({status: 'success'}))
         } else {
-            // thunkAPI.dispatch(setAppStatus({status: 'failed'}))
-            // return thunkAPI.rejectWithValue({})
+            thunkAPI.dispatch(setAppStatus({status: 'failed'}))
+            return thunkAPI.rejectWithValue({})
         }
         thunkAPI.dispatch(setAppStatus({status: 'success'}))
     } catch (e) {

@@ -4,16 +4,19 @@ import {CircularProgress, Container} from '@mui/material';
 import {TodolistsList} from '../features/TodolistsList/TodolistsList';
 import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar';
 import {Navigate, Route, Routes} from 'react-router-dom';
-import {Login} from '../features/login/Login';
-import {AppRootStateType, useAppDispatch} from './store';
+import {Login} from '../features/Auth/Login';
+import {useAppDispatch} from './store';
 import {useSelector} from 'react-redux';
 import {initializeAppTC} from './app-reducer';
+import {selectIsInitialized} from './selectors';
+import {NotFoundPage} from '../components/NotFoundPage/NotFoundPage';
 
 type AppPropsType = { demo?: boolean }
 
 function App({demo = false}: AppPropsType) {
 
-    const isInitialized = useSelector<AppRootStateType, boolean>(state => state.app.isInitialized)
+    const isInitialized = useSelector(selectIsInitialized)
+
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -36,7 +39,7 @@ function App({demo = false}: AppPropsType) {
                     <Route path={'/'} element={<TodolistsList demo={demo}/>}/>
                     <Route path={'/login'} element={<Login/>}/>
                     <Route path={'*'} element={<Navigate to={'404'}/>}/>
-                    <Route path={'/404'} element={<h1>404: Page not found</h1>}/>
+                    <Route path={'/404'} element={<NotFoundPage/>}/>
                 </Routes>
             </Container>
             <ErrorSnackbar/>

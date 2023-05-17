@@ -7,7 +7,7 @@ import {appReducer} from './app-reducer';
 import {AppRootStateType, RootReducerType} from './store';
 import {v1} from 'uuid';
 import thunk from 'redux-thunk';
-import {authReducer} from '../features/login/auth-reducer';
+import {authReducer} from '../features/Auth/auth-reducer';
 import {configureStore} from '@reduxjs/toolkit';
 import {TaskPriorities, TaskStatuses} from '../api/todolistAPI';
 

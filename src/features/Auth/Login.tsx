@@ -9,14 +9,16 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {FormikHelpers, useFormik} from 'formik';
 import {loginTC} from './auth-reducer';
-import {AppRootStateType, useAppDispatch} from '../../app/store';
+import {useAppDispatch} from '../../app/store';
 import {useSelector} from 'react-redux';
 import {Navigate} from 'react-router-dom';
 import {LoginParamsType} from '../../api/todolistAPI';
+import {selectIsLoggedIn} from './selectors';
 
 export const Login = () => {
 
-    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLogged)
+    const isLoggedIn = useSelector(selectIsLoggedIn)
+    
     const dispatch = useAppDispatch()
 
     type FormikErrorType = {
@@ -33,11 +35,11 @@ export const Login = () => {
         },
         validate: (values) => {
             const errors: FormikErrorType = {}
-            // if (!values.email) {
-            //     errors.email = 'Required'
-            // } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-            //     errors.email = 'Invalid email address'
-            // }
+            if (!values.email) {
+                errors.email = 'Required'
+            } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+                errors.email = 'Invalid email address'
+            }
             if (values.password.length < 4) {
                 errors.password = 'The password is too short'
             }
