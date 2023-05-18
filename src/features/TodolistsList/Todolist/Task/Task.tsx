@@ -8,7 +8,7 @@ import {TaskStatuses, TaskType} from '../../../../api/todolistAPI';
 type TaskPropsType = {
     todolistId: string
     task: TaskType
-    deleteTask: (todolistId: string, taskId: string) => void
+    deleteTask: (arg: {todolistId: string, taskId: string}) => void
     changeTaskStatus: (todolistId: string, id: string, newValue: TaskStatuses) => void
     changeTaskTitle: (todolistId: string, taskId: string, title: string) => void
 }
@@ -17,7 +17,7 @@ type TaskPropsType = {
 export const Task: React.FC<TaskPropsType> = React.memo((props) => {
     const {todolistId, task, deleteTask, changeTaskStatus, changeTaskTitle} = props
 
-    const pureDeleteTask = useCallback(() => deleteTask(todolistId, task.id), [deleteTask, todolistId, task.id])
+    const pureDeleteTask = useCallback(() => deleteTask({todolistId: todolistId, taskId: task.id}), [deleteTask, todolistId, task.id])
 
     const toggleCheckbox = (e: ChangeEvent<HTMLInputElement>) => {
         changeTaskStatus(todolistId, task.id, e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New)

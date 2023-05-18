@@ -1,51 +1,52 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback} from 'react';
 import {AddItemForm} from '../../../components/AddItemForm/AddItemForm';
 import {EditableSpan} from '../../../components/EditableSpan/EditableSpan';
 import {Button, IconButton} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {FilterValueType, TodolistDomainType} from '../todolist-reducer';
-import {Task} from "./Task/Task";
+import {TodolistDomainType} from './todolist-reducer';
+import {Task} from './Task/Task';
 import {TaskStatuses, TaskType} from '../../../api/todolistAPI';
+import {useActions} from '../../../app/store';
+import {todolistsActions} from './index';
+import {tasksAsyncActions} from './Task';
 
 //types
 export type TodolistPropsType = {
     todolist: TodolistDomainType
     tasks: Array<TaskType>
-    deleteTask: (todolistId: string, id: string) => void
-    changeFilter: (todolistId: string, newFilterValue: FilterValueType) => void
-    addTask: (todolistId: string, title: string) => void
-    changeTaskStatus: (todolistId: string, id: string, newValue: TaskStatuses) => void
-    deleteTodolist: (todolistId: string) => void
-    changeTodolistTitle: (todolistId: string, title: string) => void
-    changeTaskTitle: (todolistId: string, taskId: string, title: string) => void
     demo?: boolean
 }
 
 //component
 export const Todolist: React.FC<TodolistPropsType> = React.memo(
-    ({
-         todolist, changeTodolistTitle, deleteTodolist,
-         changeTaskTitle, changeTaskStatus, addTask, tasks, deleteTask, changeFilter, demo = false
-     }) => {
+    ({todolist , tasks, demo = false}) => {
 
-        // const dispatch = useAppDispatch()
+        const {deleteTodolist, changeTodolistFilter, changeTodolistTitle} = useActions(todolistsActions)
 
-        useEffect(() => {
-            if (demo) {
-                return
-            }
-            // dispatch(fetchTasks(todolist.id))
-        } ,[])
+        const {addTask, updateTask, deleteTask} = useActions(tasksAsyncActions)
 
-        const pureDeleteTodolist = () => deleteTodolist(todolist.id)
 
-        const addTaskForTodolist = useCallback((title: string) => addTask(todolist.id, title), [addTask, todolist.id])
+        const changeTaskStatus = useCallback((todolistId: string, taskId: string, newValue: TaskStatuses) => {
+            updateTask({todolistId, taskId, domainModel: {status: newValue}})
+        }, [])
 
-        const pureChangeTodolistTitle = useCallback((title: string) => changeTodolistTitle(todolist.id, title), [changeTodolistTitle, todolist.id])
+        const changeTaskTitle = useCallback((todolistId: string, taskId: string, title: string) => {
+            updateTask({todolistId, taskId, domainModel: {title: title}})
+        }, [])
 
-        const changeFilterAll = useCallback(() => changeFilter(todolist.id, 'all'), [changeFilter, todolist.id])
-        const changeFilterActive = useCallback(() => changeFilter(todolist.id, 'active'), [changeFilter, todolist.id])
-        const changeFilterCompleted = useCallback(() => changeFilter(todolist.id, 'completed'), [changeFilter, todolist.id])
+        const pureDeleteTodolist = () => deleteTodolist({todolistId: todolist.id})
+
+        const addTaskForTodolist = useCallback((title: string) => {
+            addTask({todolistId: todolist.id, title})
+        }, [addTask, todolist.id])
+
+        const pureChangeTodolistTitle = useCallback((title: string) => {
+            changeTodolistTitle({todolistId: todolist.id, title})
+        }, [changeTodolistTitle, todolist.id])
+
+        const changeFilterAll = useCallback(() => changeTodolistFilter({todolistId: todolist.id, filter: 'all'}), [todolist.id])
+        const changeFilterActive = useCallback(() => changeTodolistFilter({todolistId: todolist.id, filter: 'active'}), [todolist.id])
+        const changeFilterCompleted = useCallback(() => changeTodolistFilter({todolistId: todolist.id, filter: 'completed'}), [todolist.id])
 
         let filteredTask = tasks
 

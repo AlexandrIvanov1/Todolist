@@ -2,7 +2,7 @@ import React from 'react'
 import {Provider} from 'react-redux'
 import {combineReducers} from 'redux'
 import {taskReducer} from '../features/TodolistsList/Todolist/Task/task-reducer'
-import {todolistReducer} from '../features/TodolistsList/todolist-reducer'
+import {todolistReducer} from '../features/TodolistsList/Todolist/todolist-reducer'
 import {appReducer} from './app-reducer';
 import {AppRootStateType, RootReducerType} from './store';
 import {v1} from 'uuid';
