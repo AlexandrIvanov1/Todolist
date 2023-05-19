@@ -4,7 +4,7 @@ import {handleServerNetworkError} from '../utils/error-utils';
 import {setIsLoggedIn} from '../features/Auth/auth-reducer';
 
 
-export const initializeAppTC = createAsyncThunk('app/initializeApp', async (arg, thunkAPI) => {
+const initializeApp = createAsyncThunk('app/initializeApp', async (arg, thunkAPI) => {
     thunkAPI.dispatch(setAppStatus({status: 'loading'}))
     try {
         const data = await authAPI.me()
@@ -21,6 +21,10 @@ export const initializeAppTC = createAsyncThunk('app/initializeApp', async (arg,
         return thunkAPI.rejectWithValue({})
     }
 })
+
+export const appAsyncActions = {
+    initializeAppTC: initializeApp
+}
 
 const slice = createSlice({
     name: 'app',
@@ -41,7 +45,7 @@ const slice = createSlice({
         // }
     },
     extraReducers: builder => {
-        builder.addCase(initializeAppTC.fulfilled, (state) => {
+        builder.addCase(initializeApp.fulfilled, (state) => {
             state.isInitialized = true
         })
     }

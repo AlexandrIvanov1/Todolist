@@ -3,7 +3,7 @@ import {AppBar, Box, Button, IconButton, LinearProgress, Toolbar, Typography} fr
 import {MenuBook} from '@mui/icons-material';
 import {useSelector} from 'react-redux';
 import {useAppDispatch} from '../../app/store';
-import {logoutTC} from '../../features/Auth/auth-reducer';
+import {logout} from '../../features/Auth/auth-reducer';
 import {appSelectors} from '../../app';
 import {authSelectors} from '../../features/Auth';
 
@@ -14,7 +14,7 @@ export function AppBarComponent() {
 
     const dispatch = useAppDispatch()
 
-    const logout = () => dispatch(logoutTC())
+    const logoutCb = () => dispatch(logout())
 
     return (
         <Box sx={{flexGrow: 1}}>
@@ -26,7 +26,7 @@ export function AppBarComponent() {
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
                         <Button color="inherit">Todolist</Button>
                     </Typography>
-                    {isLoggedIn && <Button color="inherit" onClick={logout}>Logout</Button>}
+                    {isLoggedIn && <Button color="inherit" onClick={logoutCb}>Logout</Button>}
                 </Toolbar>
             </AppBar>
             <div style={{position: 'relative'}}>

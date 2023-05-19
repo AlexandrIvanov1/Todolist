@@ -1,11 +1,11 @@
-import {initializeAppTC, setAppStatus} from '../../app/app-reducer';
+import {setAppStatus, appAsyncActions} from '../../app/app-reducer';
 import {authAPI, FieldsErrorsType, LoginParamsType} from '../../api/todolistAPI';
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {clearTodolistsAndTasks} from '../../common/common.actions';
 import {AxiosError} from 'axios';
 
-export const loginTC = createAsyncThunk<undefined, LoginParamsType, {
+export const login = createAsyncThunk<undefined, LoginParamsType, {
     rejectValue: { errors: Array<string>, fieldsErrors?: Array<FieldsErrorsType> }
 }>('auth/login', async (data, thunkAPI) => {
     thunkAPI.dispatch(setAppStatus({status: 'loading'}))
@@ -27,7 +27,7 @@ export const loginTC = createAsyncThunk<undefined, LoginParamsType, {
     }
 })
 
-export const logoutTC = createAsyncThunk('auth/logout', async (param, thunkAPI) => {
+export const logout = createAsyncThunk('auth/logout', async (param, thunkAPI) => {
     thunkAPI.dispatch(setAppStatus({status: 'loading'}))
     try {
         const data = await authAPI.logout()
@@ -46,7 +46,9 @@ export const logoutTC = createAsyncThunk('auth/logout', async (param, thunkAPI) 
     }
 })
 
-const slice = createSlice({
+export const authAsyncActions = {login, logout}
+
+export const slice = createSlice({
     name: 'auth',
     initialState: {
         isLogged: false
@@ -57,13 +59,13 @@ const slice = createSlice({
         }
     },
     extraReducers: builder => {
-        builder.addCase(loginTC.fulfilled, (state) => {
+        builder.addCase(login.fulfilled, (state) => {
             state.isLogged = true
         })
-        builder.addCase(logoutTC.fulfilled, (state) => {
+        builder.addCase(logout.fulfilled, (state) => {
             state.isLogged = false
         })
-        builder.addCase(initializeAppTC.fulfilled, (state) => {
+        builder.addCase(appAsyncActions.initializeAppTC.fulfilled, (state) => {
             state.isLogged = true
         })
     }

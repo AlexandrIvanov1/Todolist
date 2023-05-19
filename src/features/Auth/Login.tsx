@@ -8,12 +8,12 @@ import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {FormikHelpers, useFormik} from 'formik';
-import {loginTC} from './auth-reducer';
 import {useAppDispatch} from '../../app/store';
 import {useSelector} from 'react-redux';
 import {Navigate} from 'react-router-dom';
 import {LoginParamsType} from '../../api/todolistAPI';
 import {selectIsLoggedIn} from './selectors';
+import {authActions} from './';
 
 export const Login = () => {
 
@@ -47,9 +47,9 @@ export const Login = () => {
         },
         onSubmit: async (values, formikHelpers: FormikHelpers<LoginParamsType>) => {
             // formik.resetForm()
-            const res = await dispatch(loginTC(values))
+            const res = await dispatch(authActions.login(values))
             debugger
-            if (loginTC.rejected.match(res)) {
+            if (authActions.login.rejected.match(res)) {
                 if (res.payload?.fieldsErrors?.length) {
                     const error = res.payload?.fieldsErrors[0]
                     debugger

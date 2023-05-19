@@ -3,7 +3,7 @@ import {AddItemForm} from '../../../components/AddItemForm/AddItemForm';
 import {EditableSpan} from '../../../components/EditableSpan/EditableSpan';
 import {Button, IconButton} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {TodolistDomainType} from './todolist-reducer';
+import {FilterValueType, TodolistDomainType} from './todolist-reducer';
 import {Task} from './Task/Task';
 import {TaskStatuses, TaskType} from '../../../api/todolistAPI';
 import {useActions} from '../../../app/store';
@@ -79,23 +79,28 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(
                     })}
                 </ul>
                 <div>
-                    <Button
-                        onClick={changeFilterAll}
-                        color={'inherit'}
-                        variant={todolist.filter === 'all' ? 'contained' : 'text'}
-                    >All</Button>
-                    <Button
-                        onClick={changeFilterActive}
-                        color={'primary'}
-                        variant={todolist.filter === 'active' ? 'contained' : 'text'}
-                    >Active</Button>
-                    <Button
-                        onClick={changeFilterCompleted}
-                        color={'secondary'}
-                        variant={todolist.filter === 'completed' ? 'contained' : 'text'}
-                    >Completed</Button>
+                    <FilterButton callback={changeFilterAll} filter={todolist.filter} color={'inherit'} text={'All'}/>
+                    <FilterButton callback={changeFilterActive} filter={todolist.filter} color={'primary'} text={'Active'}/>
+                    <FilterButton callback={changeFilterCompleted} filter={todolist.filter} color={'secondary'} text={'Completed'}/>
                 </div>
             </div>
         )
     }
 )
+
+type FilterButtonPropsType = {
+    callback: () => void
+    filter: FilterValueType
+    color: any
+    text: string
+}
+
+export const FilterButton: React.FC<FilterButtonPropsType> = ({callback, filter, color, text}) => {
+    return (
+        <Button
+            onClick={callback}
+            color={color}
+            variant={filter === text.toLowerCase() ? 'contained' : 'text'}
+        >{text}</Button>
+    )
+}

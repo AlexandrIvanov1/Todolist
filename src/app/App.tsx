@@ -4,10 +4,10 @@ import {CircularProgress, Container} from '@mui/material';
 import {TodolistsList} from '../features/TodolistsList/TodolistsList';
 import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar';
 import {Navigate, Route, Routes} from 'react-router-dom';
-import {Login} from '../features/Auth/Login';
+import {Login} from '../features/Auth';
 import {useAppDispatch} from './store';
 import {useSelector} from 'react-redux';
-import {initializeAppTC} from './app-reducer';
+import {appAsyncActions} from './app-reducer';
 import {selectIsInitialized} from './selectors';
 import {NotFoundPage} from '../components/NotFoundPage/NotFoundPage';
 
@@ -21,7 +21,7 @@ function App({demo = false}: AppPropsType) {
 
     useEffect(() => {
         if (!demo) {
-            dispatch(initializeAppTC())
+            dispatch(appAsyncActions.initializeAppTC())
         }
     }, [])
 
